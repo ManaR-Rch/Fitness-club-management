@@ -33,3 +33,5 @@ CREATE TABLE Reservation (
     FOREIGN KEY (id_membre) REFERENCES User(id_user) ON DELETE CASCADE,
     FOREIGN KEY (id_activite) REFERENCES Activite(id_activite) ON DELETE CASCADE
 );
+
+ALTER TABLE Activite RENAME COLUMN nom TO titre;
