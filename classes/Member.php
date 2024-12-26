@@ -3,7 +3,7 @@
 require_once __DIR__.'/User.php';
 
 class Member extends User{
-    public function register($database){
+    public function register(){
         
     }
 }
