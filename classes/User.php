@@ -7,14 +7,16 @@ class User{
     protected $phone;
     protected $email;
     protected $password;
+    protected $role;
 
-    public function __construct($id, $nom, $prenom, $phone, $email, $password){
+    public function __construct($id, $nom, $prenom, $phone, $email, $password, $role){
         $this->setId($id);
         $this->setNom($nom);
         $this->setPrenom($prenom);
         $this->setPhone($phone);
         $this->setEmail($email);
         $this->setPassword($password);
+        $this->setRole($role);
     }
 
     //getters
@@ -42,6 +44,10 @@ class User{
         return $this->password;
     }
 
+    public function getRole(){
+        return $this->role;
+    }
+
     //setters
     public function setId($id){
         $this->id_user = $id;
@@ -67,13 +73,17 @@ class User{
         $this->password = $password;
     }
 
+    public function setRole($role){
+        $this->role = $role;
+    }
+
     //magic methods
     public function __toString(){
-        return $this->id_user.' '.$this->nom;
+        return $this->id_user.' '.$this->nom.' '.$this->role;
     }
 
     //methods
-    public function login($database){
+    public function login(){
         
     }
 }
