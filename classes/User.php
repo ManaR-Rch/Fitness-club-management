@@ -67,7 +67,13 @@ class User{
         $this->password = $password;
     }
 
+    //magic methods
     public function __toString(){
         return $this->id_user.' '.$this->nom;
+    }
+
+    //methods
+    public function login($database){
+        
     }
 }
