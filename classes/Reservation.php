@@ -1,11 +1,14 @@
 <?php
 
+require_once __DIR__.'/../database/connection.php';
+
 class Reservation{
     private $id_reservation;
     private $id_membre;
     private $id_activite;
     private $date_reservation;
     private $status;
+    private $database;
 
     public function __construct($id_reservation, $id_membre, $id_activite, $date_reservation, $status){
         $this->setId($id_reservation);
@@ -13,6 +16,7 @@ class Reservation{
         $this->setIdActivite($id_activite);
         $this->setDateReservation($date_reservation);
         $this->setStatus($status);
+        $database = new Connection();
     }
 
     //getters
@@ -55,5 +59,44 @@ class Reservation{
 
     public function setStatus($status){
         $this->status = $status;
+    }
+
+    //methods
+    public function bookActivity(){
+        try{
+            $db = $this->database->getConnection();
+            $sql = "INSERT INTO reservation(id_membre, id_activite, date_reservation, status) VALUES(:id_membre, :id_activite, :date_reservation, :status)";
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id_membre', $this->id_membre, PDO::PARAM_INT);
+            $stmt->bindValue(':id_activite', $this->id_activite, PDO::PARAM_INT);
+            $stmt->bindValue(':date_reservation', $this->date_reservation, PDO::PARAM_STR);
+            $stmt->bindValue(':status', $this->status, PDO::PARAM_STR);
+            if($stmt->execute()){
+                return true;
+            }
+            
+            return false;
+        }catch(PDOException $e){
+            echo "Error : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function updateReservation(){
+        try{
+            $db = $this->database->getConnection();
+            $sql = "UPDATE reservation SET status = :status WHERE id_membre = :id_membre";
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id_membre', $this->id_membre, PDO::PARAM_INT);
+            $stmt->bindValue(':status', $this->status, PDO::PARAM_STR);
+            if($stmt->execute()){
+                return true;
+            }
+            
+            return false;
+        }catch(PDOException $e){
+            echo "Error : " . $e->getMessage();
+            return false;
+        }
     }
 }
