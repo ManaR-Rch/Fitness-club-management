@@ -151,4 +151,49 @@ class Activity{
         }
     }
     
+
+    public function ConsulterActivitesReservees() {
+        try {
+           
+            $stmt = $this->pdo->prepare("
+                SELECT 
+                    Reservation.id_reservation,
+                    Reservation.date_reservation,
+                    Reservation.status,
+                    Activite.id_activite,
+                    Activite.titre,
+                    Activite.description,
+                    Activite.date_debut,
+                    Activite.date_fin,
+                    User.id_user AS id_membre,
+                    User.nom AS nom_membre,
+                    User.prenom AS prenom_membre,
+                    User.email AS email_membre
+                FROM 
+                    Reservation
+                INNER JOIN 
+                    Activite ON Reservation.id_activite = Activite.id_activite
+                INNER JOIN 
+                    User ON Reservation.id_membre = User.id_user
+                ORDER BY 
+                    Reservation.date_reservation DESC
+            ");
+    
+            $stmt->execute();
+    
+            $resultats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+            if (count($resultats) > 0) {
+                return $resultats;
+            } else {
+                echo "Aucune réservation trouvée pour le moment.";
+                return [];
+            }
+        } catch (PDOException $e) {
+
+            echo "Erreur lors de la récupération des activités réservées : " . $e->getMessage();
+        }
+    }
+    
+    
 }
