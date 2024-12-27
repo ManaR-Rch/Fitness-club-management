@@ -1,5 +1,15 @@
 <?php
 require_once './../../classes/Member.php';
+require_once './../../classes/User.php';
+session_start();
+
+if(!User::isAllowed('guest')){
+  if($_SESSION['role'] == 'membre'){
+    header('Location: ./../membre/myreservations.php');
+  }else{
+    header('Location: ./../admin/reservations.php');
+  }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
     $member = new Member(
@@ -123,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
                 <div class="card-footer text-center pt-0 px-lg-2 px-1">
                   <p class="mb-2 text-sm mx-auto">
                     Already have an account?
-                    <a href="signin.php" class="text-primary text-gradient font-weight-bold">Sign in</a>
+                    <a href="./sign-in.php" class="text-primary text-gradient font-weight-bold">Sign in</a>
                   </p>
                 </div>
               </div>

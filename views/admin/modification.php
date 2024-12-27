@@ -1,7 +1,12 @@
 <?php
 
 require_once '../../classes/Activity.php';
-include("../../database/connection.php");
+require_once './../../classes/User.php';
+session_start();
+
+if(!User::isAllowed('admin')){
+  header('Location: ./../auth/sign-in.php');
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 

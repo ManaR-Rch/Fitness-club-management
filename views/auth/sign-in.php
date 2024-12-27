@@ -1,14 +1,22 @@
 <?php
 require_once './../../classes/Member.php';
-
+require_once './../../classes/User.php';
 session_start();
+
+if(!User::isAllowed('guest')){
+  if($_SESSION['role'] == 'membre'){
+    header('Location: ./../membre/myreservations.php');
+  }else{
+    header('Location: ./../admin/reservations.php');
+  }
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $user = new User(null, "", "", "", $_POST['email'], $_POST['password'], "");
     $result = $user->login($_POST['email'], $_POST['password']);
     
     if ($result['success']) {
-        header('Location: dashboard.php');
+        header('Location: '.$_SERVER['PHP_SELF']);
         exit;
     }
     $error = $result['message'];
@@ -118,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                   </div>
                   <p class="mt-4 text-sm text-center">
                     Don't have an account?
-                    <a href="signup.php" class="text-primary text-gradient font-weight-bold">Sign up</a>
+                    <a href="./sign-up.php" class="text-primary text-gradient font-weight-bold">Sign up</a>
                   </p>
                 </form>
               </div>

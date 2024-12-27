@@ -1,3 +1,11 @@
+<?php
+require_once './../../classes/User.php';
+session_start();
+
+if(!User::isAllowed('admin')){
+  header('Location: ./../auth/sign-in.php');
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -61,7 +69,6 @@
         <h1>Liste des Activités</h1>
         <?php
         require_once '../../classes/Activity.php';
-        include("../../database/connection.php");
         $activity = new Activity(null, null, null, null, null, null, null);
         $activities = $activity->ConsulterActivites();
         ?>
