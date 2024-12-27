@@ -1,89 +1,87 @@
 <?php
 
-class Activity{
-    private $id_activity;
+class Activity {
+    private $id_activite;
     private $titre;
     private $description;
     private $capacite;
     private $date_debut;
     private $date_fin;
     private $disponibilite;
+    protected $database;
 
-    public function __construct($id_activity, $titre, $description, $capacite, $date_debut, $date_fin, $disponibilite){
-        $this->setId($id_activity);
+    public function __construct($id_activite, $titre, $description, $capacite, $date_debut, $date_fin, $disponibilite) {
+        $this->setId($id_activite);
         $this->setTitre($titre);
         $this->setDescription($description);
         $this->setCapacite($capacite);
         $this->setDateDebut($date_debut);
         $this->setDateFin($date_fin);
         $this->setDisponibilite($disponibilite);
+        $this->database = new Connection();
     }
 
-    //getters
-    public function getId(){
+    // Getters
+    public function getId() {
         return $this->id_activite;
     }
 
-    public function getTitre(){
+    public function getTitre() {
         return $this->titre;
     }
 
-    public function getDescription(){
+    public function getDescription() {
         return $this->description;
     }
 
-    public function getCapacite(){
+    public function getCapacite() {
         return $this->capacite;
     }
 
-    public function getDateDebut(){
+    public function getDateDebut() {
         return $this->date_debut;
     }
 
-    public function getDateFin(){
+    public function getDateFin() {
         return $this->date_fin;
     }
 
-    public function getDisponibilite(){
-        return $this->disponibilite;
-    }
-
-    //setters
-    public function setId($id){
+    // Setters
+    public function setId($id) {
         $this->id_activite = $id;
     }
 
-    public function setTitre($titre){
+    public function setTitre($titre) {
         $this->titre = $titre;
     }
 
-    public function setDescription($description){
+    public function setDescription($description) {
         $this->description = $description;
     }
 
-    public function setCapacite($capacite){
+    public function setCapacite($capacite) {
         $this->capacite = $capacite;
     }
 
-    public function setDateDebut($date_debut){
+    public function setDateDebut($date_debut) {
         $this->date_debut = $date_debut;
     }
 
-    public function setDateFin($date_fin){
+    public function setDateFin($date_fin) {
         $this->date_fin = $date_fin;
     }
 
-    public function setDisponibilite($disponibilite){
+    public function setDisponibilite($disponibilite) {
         $this->disponibilite = $disponibilite;
     }
 
     public function AjouterActivite() {
         try {
-    
-            $stmt = $this->pdo->prepare("INSERT INTO activite (titre, description, capacite, date_debut, date_fin, disponibilite) VALUES (:titre, :description, :capacite, :date_debut, :date_fin, :disponibilite)");
+            $pdo = $this->database->getConnection();
+            $stmt = $pdo->prepare("INSERT INTO activite (titre, description, capacite, date_debut, date_fin, disponibilite) VALUES (:titre, :description, :capacite, :date_debut, :date_fin, :disponibilite)");
             $stmt->bindParam(':titre', $this->titre, PDO::PARAM_STR);
             $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
-            $stmt->bindParam(':capacite', $this->capacite, PDO::PARAM_INT); 
+            $stmt->bindParam(':capacite', $this->capacite, PDO::PARAM_INT);
             $stmt->bindParam(':date_debut', $this->date_debut, PDO::PARAM_STR);
             $stmt->bindParam(':date_fin', $this->date_fin, PDO::PARAM_STR);
             $stmt->bindParam(':disponibilite', $this->disponibilite, PDO::PARAM_INT);
@@ -94,30 +92,26 @@ class Activity{
         }
     }
 
-    public function SupprimerActivite() {
-
+    public function SupprimerActivite(): void {
         try {
-
-            $stmt = $this->pdo->prepare("DELETE FROM activite WHERE id_activite = :id_activite");
-            $stmt->bindParam(':id_activite', $id_activite, PDO::PARAM_INT);
+            $pdo = $this->database->getConnection();
+            $stmt = $pdo->prepare("DELETE FROM Activite WHERE id_activite = :id_activite");
+            $stmt->bindParam(':id_activite', $this->id_activite);
             $stmt->execute();
-    
             if ($stmt->rowCount() > 0) {
-                echo "L'activité avec l'ID $id a été supprimée avec succès.";
+                echo "L'activité avec l'ID {$this->id_activite} a été supprimée avec succès.";
             } else {
-                echo "Aucune activité trouvée avec l'ID $id_activite.";
+                echo "Aucune activité trouvée avec l'ID {$this->id_activite}.";
             }
         } catch (PDOException $e) {
-
             echo "Erreur : " . $e->getMessage();
         }
     }
-    
 
     public function ModifierActivite() {
         try {
-
-             $stmt = $this->pdo->prepare("
+            $pdo = $this->database->getConnection();
+            $stmt = $pdo->prepare("
                 UPDATE activite 
                 SET 
                     titre = :titre,
@@ -129,71 +123,77 @@ class Activity{
                 WHERE 
                     id_activite = :id_activite
             ");
-    
-            $stmt->bindParam(':id', $this->id_activity, PDO::PARAM_INT);
-            $stmt->bindParam(':titre', $$this->titre, PDO::PARAM_STR);
+            $stmt->bindParam(':id_activite', $this->id_activite, PDO::PARAM_INT);
+            $stmt->bindParam(':titre', $this->titre, PDO::PARAM_STR);
             $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
             $stmt->bindParam(':capacite', $this->capacite, PDO::PARAM_INT);
             $stmt->bindParam(':date_debut', $this->date_debut, PDO::PARAM_STR);
-            $stmt->bindParam(':date_fin',$this->date_fin, PDO::PARAM_STR);
-            $stmt->bindParam(':disponibilite',$this->disponibilite, PDO::PARAM_INT);
-    
+            $stmt->bindParam(':date_fin', $this->date_fin, PDO::PARAM_STR);
+            $stmt->bindParam(':disponibilite', $this->disponibilite, PDO::PARAM_INT);
             $stmt->execute();
-    
             if ($stmt->rowCount() > 0) {
-                return true;
+                echo "Activité modifiée avec succès.";
             } else {
-                return false
+                echo "Aucune modification effectuée.";
             }
         } catch (PDOException $e) {
             echo "Erreur : " . $e->getMessage();
-            return false;
         }
     }
-    
 
-    public function ConsulterActivitesReservees() {
+    public function ConsulterActivites() {
         try {
-           
-            $stmt = $this->pdo->prepare("
-                SELECT 
-                    Reservation.id_reservation,
-                    Reservation.date_reservation,
-                    Reservation.status,
-                    Activite.id_activite,
-                    Activite.titre,
-                    Activite.description,
-                    Activite.date_debut,
-                    Activite.date_fin,
-                    User.id_user AS id_membre,
-                    User.nom AS nom_membre,
-                    User.prenom AS prenom_membre,
-                    User.email AS email_membre
-                FROM 
-                    Reservation
-                INNER JOIN 
-                    Activite ON Reservation.id_activite = Activite.id_activite
-                INNER JOIN 
-                    User ON Reservation.id_membre = User.id_user
-                ORDER BY 
-                    Reservation.date_reservation DESC
-            ");
+            $pdo = $this->database->getConnection();
+            $stmt = $pdo->query("SELECT * FROM Activite");
+            $activites = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            if (!empty($activites)) {
+                echo "<table class='table-auto w-full border-collapse text-sm'>";
+                echo "<thead>";
+                echo "<tr class='bg-gray-100'>";
+                echo "<th class='px-2 py-1 border'>ID</th>";
+                echo "<th class='px-2 py-1 border'>Titre</th>";
+                echo "<th class='px-2 py-1 border'>Description</th>";
+                echo "<th class='px-2 py-1 border'>Capacité</th>";
+                echo "<th class='px-2 py-1 border'>Date Début</th>";
+                echo "<th class='px-2 py-1 border'>Date Fin</th>";
+                echo "<th class='px-2 py-1 border'>Disponibilité</th>";
+                echo "<th class='px-2 py-1 border'>Actions</th>"; 
+                echo "</tr>";
+                echo "</thead>";
+                echo "<tbody>";
     
-            $stmt->execute();
+                foreach ($activites as $activite) {
+                    echo "<tr class='hover:bg-gray-100'>";
+                    echo "<td class='px-2 py-1 border'>" . htmlspecialchars($activite['id_activite']) . "</td>";
+                    echo "<td class='px-2 py-1 border'>" . htmlspecialchars($activite['titre']) . "</td>";
+                    echo "<td class='px-2 py-1 border'>" . htmlspecialchars($activite['description']) . "</td>";
+                    echo "<td class='px-2 py-1 border'>" . htmlspecialchars($activite['capacite']) . "</td>";
+                    echo "<td class='px-2 py-1 border'>" . htmlspecialchars($activite['date_debut']) . "</td>";
+                    echo "<td class='px-2 py-1 border'>" . htmlspecialchars($activite['date_fin']) . "</td>";
+                    echo "<td class='px-2 py-1 border'>" . ($activite['disponibilite'] ? "Disponible" : "Non Disponible") . "</td>";
     
-            $resultats = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    echo "<td class='px-2 py-1 border text-center'>";
+                    echo "<a href='modification.php?id=" . htmlspecialchars($activite['id_activite']) . "' class='text-blue-500 hover:text-blue-700'>modifier</a>";
+                    echo " | ";
+                    echo "<a href='delete.php?id=" . htmlspecialchars($activite['id_activite']) . "' class='text-red-500 hover:text-red-700')'>Supprimer</a>";
+                    echo "</td>";
     
-            if (count($resultats) > 0) {
-                return $resultats;
+                    echo "</tr>";
+                }
+    
+                echo "</tbody>";
+                echo "</table>";
             } else {
-                echo "Aucune réservation trouvée pour le moment.";
-                return [];
+                echo "Aucune activité trouvée.";
             }
         } catch (PDOException $e) {
-
-            echo "Erreur lors de la récupération des activités réservées : " . $e->getMessage();
+            echo "Erreur lors de la récupération des activités : " . $e->getMessage();
         }
     }
+    
     
     
 }
+
+?>
