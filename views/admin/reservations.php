@@ -243,6 +243,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Activity</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Member</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Phone</th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reservation Date</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
@@ -257,6 +259,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                             <h6 class="mb-0 text-sm"><?php echo $item['titre'] ?></h6>
                           </div>
                         </div>
+                      </td>
+                      <td class="align-middle text-sm">
+                        <span class="text-xs font-weight-bold"> <?php echo $item['prenom'].' '.$item['nom'] ?> </span>
+                      </td>
+                      <td class="align-middle text-sm">
+                        <span class="text-xs font-weight-bold"> <?php echo $item['telephone'] ?> </span>
                       </td>
                       <td>
                         <span class="text-xs font-weight-bold"><?php echo explode(' ', $item['date_reservation'])[0] ?></span>
