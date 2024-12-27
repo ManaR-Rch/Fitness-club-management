@@ -17,6 +17,7 @@ class Reservation{
         $this->setDateReservation($date_reservation);
         $this->setStatus($status);
         $database = new Connection();
+
     }
 
     //getters
