@@ -8,7 +8,7 @@ class Activity {
     private $date_debut;
     private $date_fin;
     private $disponibilite;
-    protected $database;
+    private $database;
 
     public function __construct($id_activite, $titre, $description, $capacite, $date_debut, $date_fin, $disponibilite) {
         $this->setId($id_activite);
