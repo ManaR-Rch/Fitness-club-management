@@ -81,4 +81,22 @@ class Reservation{
             return false;
         }
     }
+
+    public function updateReservation(){
+        try{
+            $db = $this->database->getConnection();
+            $sql = "UPDATE reservation SET status = :status WHERE id_membre = :id_membre";
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id_membre', $this->id_membre, PDO::PARAM_INT);
+            $stmt->bindValue(':status', $this->status, PDO::PARAM_STR);
+            if($stmt->execute()){
+                return true;
+            }
+            
+            return false;
+        }catch(PDOException $e){
+            echo "Error : " . $e->getMessage();
+            return false;
+        }
+    }
 }
