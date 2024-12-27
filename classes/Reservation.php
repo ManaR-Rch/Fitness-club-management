@@ -16,8 +16,7 @@ class Reservation{
         $this->setIdActivite($id_activite);
         $this->setDateReservation($date_reservation);
         $this->setStatus($status);
-        $database = new Connection();
-
+        $this->database = new Connection();
     }
 
     //getters
@@ -46,7 +45,7 @@ class Reservation{
         return $this->id_reservation = $id;
     }
 
-    public function setIdMember($id_activite){
+    public function setIdMember($id_membre){
         $this->id_membre = $id_membre;
     }
 
@@ -104,7 +103,7 @@ class Reservation{
     public function reservationsList(){
         try{
             $db = $this->database->getConnection();
-            $sql = "SELECT a.*, r.date_reservation, r.status FROM reservation r INNER JOIN activite a ON r.id_activite = a.id_activite";
+            $sql = "SELECT a.*, r.date_reservation, r.status, r.id_reservation, m.* FROM reservation r INNER JOIN activite a ON r.id_activite = a.id_activite INNER JOIN user m ON m.id_user = r.id_membre";
             $stmt = $db->prepare($sql);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -117,7 +116,7 @@ class Reservation{
     public function reservationsByMember(){
         try{
             $db = $this->database->getConnection();
-            $sql = "SELECT a.*, r.date_reservation, r.status FROM reservation r INNER JOIN activite a ON r.id_activite = a.id_activite WHERE id_membre = :id_membre";
+            $sql = "SELECT a.*, r.date_reservation, r.status, r.id_reservation FROM reservation r INNER JOIN activite a ON r.id_activite = a.id_activite WHERE id_membre = :id_membre";
             $stmt = $db->prepare($sql);
             $stmt->bindValue(':id_membre', $this->id_membre, PDO::PARAM_INT);
             $stmt->execute();
