@@ -149,4 +149,14 @@ class User{
         session_destroy();
         return ["success" => true, "message" => "Déconnexion réussie"];
     }
+
+    public static function isAllowed($role){
+        if(isset($_SESSION['user_id']) && isset($_SESSION['role'])){
+            return $_SESSION['role'] == $role;
+        }else if($role == 'guest'){
+            return true;
+        }
+    
+        return false;
+    }
 }

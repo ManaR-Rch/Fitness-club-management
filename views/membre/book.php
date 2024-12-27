@@ -1,15 +1,16 @@
 <?php
 require_once './../../classes/Reservation.php';
+require_once './../../classes/Activity.php';
 
-$reservation = new Reservation(null, null, null, null, null);
-$reservations = $reservation->reservationsList();
+$activity = new Activity(null, null, null, null, null, null, null);
+$activities = $activity->availableActivities();
+
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
-  $reservation->setId(htmlspecialchars($_POST['id']));
-  $reservation->setStatus(htmlspecialchars($_POST['submit']));
-  if($reservation->updateReservation()){
-    header("Location: " . $_SERVER['PHP_SELF']);
-  }
+    $reservation = new Reservation(null, 2, htmlspecialchars($_POST['activity']), htmlspecialchars($_POST['date']), 'confirmee');
+    if($reservation->bookActivity()){
+        header("Location: " . $_SERVER['PHP_SELF']);
+    }
 }
 
 ?>
@@ -224,7 +225,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <div class="container-fluid py-2">
       <div class="row">
         <div class="ms-3">
-          <h3 class="mb-0 h4 font-weight-bolder mb-4">Reservations</h3>
+          <h3 class="mb-0 h4 font-weight-bolder mb-4">Book Now</h3>
         </div>
       </div>
       <div class="row mb-4">
@@ -233,64 +234,28 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
             <div class="card-header pb-0">
               <div class="row">
                 <div class="col-lg-6 col-7">
-                  <h6>Reservations list</h6>
+                  <h6>Book an activity</h6>
                 </div>
               </div>
             </div>
-            <div class="card-body px-0 pb-2">
-              <div class="table-responsive">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Activity</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Member</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Phone</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reservation Date</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php foreach($reservations as $item): ?>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?php echo $item['titre'] ?></h6>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="align-middle text-sm">
-                        <span class="text-xs font-weight-bold"> <?php echo $item['prenom'].' '.$item['nom'] ?> </span>
-                      </td>
-                      <td class="align-middle text-sm">
-                        <span class="text-xs font-weight-bold"> <?php echo $item['telephone'] ?> </span>
-                      </td>
-                      <td>
-                        <span class="text-xs font-weight-bold"><?php echo explode(' ', $item['date_reservation'])[0] ?></span>
-                      </td>
-                      <td class="align-middle text-center text-sm">
-                        <span class="text-xs font-weight-bold"> <?php echo $item['status'] ?> </span>
-                      </td>
-                      <td class="align-middle">
-                        <div class="text-center">
-                            <form action="" method="post">
-                                <input type="hidden" value="<?php echo $item['id_reservation'] ?>" name="id">
-                                <?php if($item['status'] != 'confirmee'): ?>
-                                    <button type="submit" name="submit" value="confirmee" class="btn btn-link text-success text-gradient px-3 mb-0" href="javascript:;">Accept</button>
-                                <?php endif; ?>
-                                
-                                <?php if($item['status'] != 'annulee'): ?>
-                                    <button type="submit" name="submit" value="annulee" class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">Refuse</button>
-                                <?php endif; ?>
-                            </form>
-                        </div>
-                      </td>
-                    </tr>
-                    <?php endforeach; ?>
-                  </tbody>
-                </table>
-              </div>
+            <div class="card-body px-0 pb-2 px-4">
+              <form action="" method="post">
+                <input type="hidden" name="id_membre" value="2">
+                <div class="input-group input-group-outline my-3" style="display: block;">
+                    <label style="display: block;">Activity</label>
+                    <select style="display: block; width:100%;" name="activity" class="form-control">
+                        <?php foreach($activities as $item): ?>
+                        <option value="<?php echo $item['id_activite'] ?>"><?php echo $item['titre'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="input-group input-group-outline my-3">
+                    <input type="date" class="form-control" name="date" />
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Book now</button>
+                  </div>
+              </form>
             </div>
           </div>
         </div>

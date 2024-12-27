@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/../database/connection.php';
 
 class Activity {
 
@@ -193,8 +194,17 @@ class Activity {
         }
     }
     
-    
+    public function availableActivities(){
+        try{
+            $db = $this->database->getConnection();
+            $sql = "SELECT * FROM activite WHERE disponibilite = 1";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            echo "Error : " . $e->getMessage();
+            return null;
+        }
+    }
     
 }
-
-?>
