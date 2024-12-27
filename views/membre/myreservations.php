@@ -2,8 +2,15 @@
 require_once './../../classes/Reservation.php';
 
 $reservation = new Reservation(null, 2, null, null, null);
-
 $reservations = $reservation->reservationsByMember();
+
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+  $reservation->setId(htmlspecialchars($_POST['id']));
+  $reservation->setStatus('annulee');
+  if($reservation->updateReservation()){
+    header("Location: " . $_SERVER['PHP_SELF']);
+  }
+}
 
 ?>
 
@@ -242,26 +249,33 @@ $reservations = $reservation->reservationsByMember();
                     </tr>
                   </thead>
                   <tbody>
+                    <?php foreach($reservations as $item): ?>
                     <tr>
                       <td>
                         <div class="d-flex px-2 py-1">
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">Material XD Version</h6>
+                            <h6 class="mb-0 text-sm"><?php echo $item['titre'] ?></h6>
                           </div>
                         </div>
                       </td>
                       <td>
-                        <span class="text-xs font-weight-bold"> 2024-01-12 </span>
+                        <span class="text-xs font-weight-bold"><?php echo explode(' ', $item['date_reservation'])[0] ?></span>
                       </td>
                       <td class="align-middle text-center text-sm">
-                        <span class="text-xs font-weight-bold"> Confirmed </span>
+                        <span class="text-xs font-weight-bold"> <?php echo $item['status'] ?> </span>
                       </td>
                       <td class="align-middle">
                         <div class="text-center">
-                            <a class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">Cancel</a>
+                          <?php if($item['status'] != 'annulee'): ?>
+                            <form action="" method="post">
+                              <input type="hidden" value="<?php echo $item['id_reservation'] ?>" name="id">
+                              <button type="submit" class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">Cancel</button>
+                            </form>
+                          <?php endif; ?>
                         </div>
                       </td>
                     </tr>
+                    <?php endforeach; ?>
                   </tbody>
                 </table>
               </div>
