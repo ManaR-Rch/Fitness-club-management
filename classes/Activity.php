@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__.'/../database/connection.php';
 
 class Activity{
     private $id_activity;
@@ -8,6 +9,7 @@ class Activity{
     private $date_debut;
     private $date_fin;
     private $disponibilite;
+    private $database;
 
     public function __construct($id_activity, $titre, $description, $capacite, $date_debut, $date_fin, $disponibilite){
         $this->setId($id_activity);
@@ -17,6 +19,7 @@ class Activity{
         $this->setDateDebut($date_debut);
         $this->setDateFin($date_fin);
         $this->setDisponibilite($disponibilite);
+        $this->database = new Connection();
     }
 
     //getters
@@ -75,5 +78,19 @@ class Activity{
 
     public function setDisponibilite($disponibilite){
         $this->disponibilite = $disponibilite;
+    }
+
+    //methods
+    public function availableActivities(){
+        try{
+            $db = $this->database->getConnection();
+            $sql = "SELECT * FROM activite WHERE disponibilite = 1";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            echo "Error : " . $e->getMessage();
+            return null;
+        }
     }
 }
