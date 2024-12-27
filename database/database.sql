@@ -15,7 +15,7 @@ CREATE TABLE User (
 
 CREATE TABLE Activite (
     id_activite INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL,
+    titre VARCHAR(100) NOT NULL,
     description TEXT,
     capacite INT NOT NULL,
     date_debut DATE NOT NULL,
@@ -33,5 +33,3 @@ CREATE TABLE Reservation (
     FOREIGN KEY (id_membre) REFERENCES User(id_user) ON DELETE CASCADE,
     FOREIGN KEY (id_activite) REFERENCES Activite(id_activite) ON DELETE CASCADE
 );
-
-ALTER TABLE Activite RENAME COLUMN nom TO titre;

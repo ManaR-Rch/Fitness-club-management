@@ -13,7 +13,7 @@ class Connection {
             $this->host = "localhost";
             $this->user = "root";
             $this->password = "";
-            $this->db = "gestionreservation";
+            $this->db = "GestionReservation";
             $pdo = new PDO("mysql:host=".$this->host, $this->user, $this->password);
     
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
