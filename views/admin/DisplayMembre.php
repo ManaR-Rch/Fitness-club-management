@@ -1,6 +1,6 @@
 <?php
-require_once 'Member.php';
-require_once '../database.php';
+require_once './../../classes/Member.php';
+require_once './../../database/connection.php';
 
 class MemberManager {
     private $database;
@@ -16,7 +16,9 @@ class MemberManager {
             $stmt = $db->prepare($query);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } 
+        }catch(PDOException $e){
+          echo $e->getErrorMessage();
+        }
     }
 
     public function deleteMember($id) {
@@ -252,7 +254,7 @@ $membres = $memberManager->getAllMembers();
                                             </div>
                                         </td>
                                         <td>
-                                            <p class="text-xs font-weight-bold mb-0"><?= htmlspecialchars($membre['phone']) ?></p>
+                                            <p class="text-xs font-weight-bold mb-0"><?= htmlspecialchars($membre['telephone']) ?></p>
                                         </td>
                                         <td class="align-middle text-center text-sm">
                                             <span class="badge badge-sm bg-gradient-success">Online</span>
