@@ -93,10 +93,23 @@ class Reservation{
                 return true;
             }
             
-            return false;
+            return false; 
         }catch(PDOException $e){
             echo "Error : " . $e->getMessage();
             return false;
+        }
+    }
+
+    public function reservationsList(){
+        try{
+            $db = $this->database->getConnection();
+            $sql = "SELECT a.*, r.date_reservation, r.status FROM reservation r INNER JOIN activite a ON r.id_activite = a.id_activite";
+            $stmt = $db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            echo "Error : " . $e->getMessage();
+            return null;
         }
     }
 }
