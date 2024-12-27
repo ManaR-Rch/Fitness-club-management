@@ -85,9 +85,9 @@ class Reservation{
     public function updateReservation(){
         try{
             $db = $this->database->getConnection();
-            $sql = "UPDATE reservation SET status = :status WHERE id_membre = :id_membre";
+            $sql = "UPDATE reservation SET status = :status WHERE id_reservation = :id_reservation";
             $stmt = $db->prepare($sql);
-            $stmt->bindValue(':id_membre', $this->id_membre, PDO::PARAM_INT);
+            $stmt->bindValue(':id_reservation', $this->id_reservation, PDO::PARAM_INT);
             $stmt->bindValue(':status', $this->status, PDO::PARAM_STR);
             if($stmt->execute()){
                 return true;

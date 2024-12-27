@@ -1,12 +1,12 @@
 <?php
 require_once './../../classes/Reservation.php';
 
-$reservation = new Reservation(null, 2, null, null, null);
-$reservations = $reservation->reservationsByMember();
+$reservation = new Reservation(null, null, null, null, null);
+$reservations = $reservation->reservationsList();
 
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
   $reservation->setId(htmlspecialchars($_POST['id']));
-  $reservation->setStatus('annulee');
+  $reservation->setStatus(htmlspecialchars($_POST['submit']));
   if($reservation->updateReservation()){
     header("Location: " . $_SERVER['PHP_SELF']);
   }
@@ -224,7 +224,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
     <div class="container-fluid py-2">
       <div class="row">
         <div class="ms-3">
-          <h3 class="mb-0 h4 font-weight-bolder mb-4">My reservations</h3>
+          <h3 class="mb-0 h4 font-weight-bolder mb-4">Reservations</h3>
         </div>
       </div>
       <div class="row mb-4">
@@ -266,12 +266,16 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                       </td>
                       <td class="align-middle">
                         <div class="text-center">
-                          <?php if($item['status'] != 'annulee'): ?>
                             <form action="" method="post">
-                              <input type="hidden" value="<?php echo $item['id_reservation'] ?>" name="id">
-                              <button type="submit" class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">Cancel</button>
+                                <input type="hidden" value="<?php echo $item['id_reservation'] ?>" name="id">
+                                <?php if($item['status'] != 'confirmee'): ?>
+                                    <button type="submit" name="submit" value="confirmee" class="btn btn-link text-success text-gradient px-3 mb-0" href="javascript:;">Accept</button>
+                                <?php endif; ?>
+                                
+                                <?php if($item['status'] != 'annulee'): ?>
+                                    <button type="submit" name="submit" value="annulee" class="btn btn-link text-danger text-gradient px-3 mb-0" href="javascript:;">Refuse</button>
+                                <?php endif; ?>
                             </form>
-                          <?php endif; ?>
                         </div>
                       </td>
                     </tr>
