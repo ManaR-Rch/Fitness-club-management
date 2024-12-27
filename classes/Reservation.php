@@ -112,4 +112,18 @@ class Reservation{
             return null;
         }
     }
+
+    public function reservationsByMember(){
+        try{
+            $db = $this->database->getConnection();
+            $sql = "SELECT a.*, r.date_reservation, r.status FROM reservation r INNER JOIN activite a ON r.id_activite = a.id_activite WHERE id_membre = :id_membre";
+            $stmt = $db->prepare($sql);
+            $stmt->bindValue(':id_membre', $this->id_membre, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            echo "Error : " . $e->getMessage();
+            return null;
+        }
+    }
 }
