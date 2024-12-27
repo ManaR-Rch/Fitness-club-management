@@ -1,7 +1,7 @@
 <?php
 
 class Connection {  
-   private $bd;
+   private $db;
    private $host; 
    private $user;      
    private $password;  
@@ -14,9 +14,9 @@ class Connection {
             $this->user = "root";
             $this->password = "";
             $this->db = "gestionreservation";
-            $pdo = new PDO("mysql:host=".$this->host, $this->user, $this->password);
+            $this->pdo = new PDO("mysql:host=".$this->host.";dbname=".$this->db.";charset=utf8mb4", $this->user, $this->password);
     
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo "Error : " . $e->getMessage();
         }
