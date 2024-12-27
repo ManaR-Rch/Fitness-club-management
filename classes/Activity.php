@@ -1,22 +1,25 @@
 <?php
 
 class Activity{
-    private $id_activity;
+    private $id_activite;
     private $titre;
     private $description;
     private $capacite;
     private $date_debut;
     private $date_fin;
     private $disponibilite;
+    protected $database;
 
-    public function __construct($id_activity, $titre, $description, $capacite, $date_debut, $date_fin, $disponibilite){
-        $this->setId($id_activity);
+
+    public function __construct($id_activite, $titre, $description, $capacite, $date_debut, $date_fin, $disponibilite){
+        $this->setId($id_activite);
         $this->setTitre($titre);
         $this->setDescription($description);
         $this->setCapacite($capacite);
         $this->setDateDebut($date_debut);
         $this->setDateFin($date_fin);
         $this->setDisponibilite($disponibilite);
+        $this->database = new Connection();
     }
 
     //getters
@@ -79,8 +82,8 @@ class Activity{
 
     public function AjouterActivite() {
         try {
-    
-            $stmt = $this->pdo->prepare("INSERT INTO activite (titre, description, capacite, date_debut, date_fin, disponibilite) VALUES (:titre, :description, :capacite, :date_debut, :date_fin, :disponibilite)");
+            $pdo = $this->database->getConnection();
+            $stmt = $pdo->prepare("INSERT INTO activite (titre, description, capacite, date_debut, date_fin, disponibilite) VALUES (:titre, :description, :capacite, :date_debut, :date_fin, :disponibilite)");
             $stmt->bindParam(':titre', $this->titre, PDO::PARAM_STR);
             $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
             $stmt->bindParam(':capacite', $this->capacite, PDO::PARAM_INT); 
@@ -95,20 +98,18 @@ class Activity{
     }
 
     public function SupprimerActivite() {
-
         try {
-
-            $stmt = $this->pdo->prepare("DELETE FROM activite WHERE id_activite = :id_activite");
-            $stmt->bindParam(':id_activite', $id_activite, PDO::PARAM_INT);
+            $pdo = $this->database->getConnection();
+            $stmt = $pdo->prepare("DELETE FROM Activite WHERE id_activite = :id_activite");
+            $stmt->bindParam(':id_activite', $this->id_activity);
             $stmt->execute();
-    
+
             if ($stmt->rowCount() > 0) {
-                echo "L'activité avec l'ID $id a été supprimée avec succès.";
+                echo "L'activité avec l'ID {$this->id_activity} a été supprimée avec succès.";
             } else {
-                echo "Aucune activité trouvée avec l'ID $id_activite.";
+                echo "Aucune activité trouvée avec l'ID {$this->id_activity}.";
             }
         } catch (PDOException $e) {
-
             echo "Erreur : " . $e->getMessage();
         }
     }
@@ -116,8 +117,8 @@ class Activity{
 
     public function ModifierActivite() {
         try {
-
-             $stmt = $this->pdo->prepare("
+            $pdo = $this->database->getConnection();
+            $stmt = $pdo->prepare("
                 UPDATE activite 
                 SET 
                     titre = :titre,
@@ -129,9 +130,8 @@ class Activity{
                 WHERE 
                     id_activite = :id_activite
             ");
-    
             $stmt->bindParam(':id', $this->id_activity, PDO::PARAM_INT);
-            $stmt->bindParam(':titre', $$this->titre, PDO::PARAM_STR);
+            $stmt->bindParam(':titre', $this->titre, PDO::PARAM_STR);
             $stmt->bindParam(':description', $this->description, PDO::PARAM_STR);
             $stmt->bindParam(':capacite', $this->capacite, PDO::PARAM_INT);
             $stmt->bindParam(':date_debut', $this->date_debut, PDO::PARAM_STR);
@@ -140,54 +140,43 @@ class Activity{
     
             $stmt->execute();
     
-            if ($stmt->rowCount() > 0) {
-                return true;
-            } else {
-                return false
+            try {
+                if ($stmt->rowCount() > 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (PDOException $e) {
+                echo "Erreur : " . $e->getMessage();
+                return false;
             }
         } catch (PDOException $e) {
             echo "Erreur : " . $e->getMessage();
-            return false;
         }
     }
-    public function ConsulterActivitesReservees() {
+
+    public function ConsulterActivites() {
         try {
-           
-            $stmt = $this->pdo->prepare("
-                SELECT 
-                    Reservation.id_reservation,
-                    Reservation.date_reservation,
-                    Reservation.status,
-                    Activite.id_activite,
-                    Activite.titre,
-                    Activite.description,
-                    Activite.date_debut,
-                    Activite.date_fin,
-                    User.id_user AS id_membre,
-                    User.nom AS nom_membre,
-                    User.prenom AS prenom_membre,
-                    User.email AS email_membre
-                FROM 
-                    Reservation
-                INNER JOIN 
-                    Activite ON Reservation.id_activite = Activite.id_activite
-                INNER JOIN 
-                    User ON Reservation.id_membre = User.id_user
-                ORDER BY 
-                    Reservation.date_reservation DESC
-            ");
-    
-            $stmt->execute();
-    
-            $resultats = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-            if (count($resultats) > 0) {
-                return $resultats;
+            $pdo = $this->database->getConnection();
+            $stmt = $pdo->query("SELECT * FROM Activite");
+            $activites = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            if (!empty($activites)) {
+                foreach ($activites as $activite) {
+                    echo "ID: " . htmlspecialchars($activite['id_activite']) . "<br>";
+                    echo "Titre: " . htmlspecialchars($activite['titre']) . "<br>";
+                    echo "Description: " . htmlspecialchars($activite['description']) . "<br>";
+                    echo "Capacité: " . htmlspecialchars($activite['capacite']) . "<br>";
+                    echo "Date Début: " . htmlspecialchars($activite['date_debut']) . "<br>";
+                    echo "Date Fin: " . htmlspecialchars($activite['date_fin']) . "<br>";
+                    echo "Disponibilité: " . ($activite['disponibilite'] ? "Disponible" : "Non Disponible") . "<br><br>";
+                }
             } else {
-                echo "Aucune réservation trouvée pour le moment.";
-                return [];
+                echo "Aucune activité trouvée.";
             }
         } catch (PDOException $e) {
-            echo "Erreur lors de la récupération des activités réservées : " . $e->getMessage();
+            echo "Erreur lors de la récupération des activités : " . $e->getMessage();
         }
+    }
 }
+?>

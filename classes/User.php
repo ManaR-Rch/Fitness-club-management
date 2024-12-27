@@ -20,7 +20,7 @@ class User{
         $this->setEmail($email);
         $this->setPassword($password);
         $this->setRole($role);
-        $database = new Connection();
+        $this->database = new Connection();
     }
 
 
