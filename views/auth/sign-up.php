@@ -41,60 +41,100 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
   <!-- CSS Files -->
   <link id="pagestyle" href="../../assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+  <style>
+    .input-group.input-group-outline .form-label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+    }
+    .input-group.input-group-outline .form-control {
+      background: transparent;
+      border: 1px solid #d2d6da;
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+    }
+    .input-group.input-group-outline .form-control:focus + .form-label,
+    .input-group.input-group-outline .form-control:not(:placeholder-shown) + .form-label {
+      transform: translateY(-100%) scale(0.85);
+      background: white;
+      padding: 0 0.5rem;
+      color: #7b809a;
+    }
+  </style>
 </head>
 <body class="">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
-                <div class="card card-plain">
-                    <div class="card-header">
-                        <h4 class="font-weight-bolder">Sign Up</h4>
-                        <p class="mb-0">Enter your information to register</p>
-                    </div>
-                    <div class="card-body">
-                        <form role="form" method="POST">
-                            <?php if (isset($errors)): ?>
-                                <?php foreach ($errors as $error): ?>
-                                    <div class="alert alert-danger text-white"><?= htmlspecialchars($error) ?></div>
-                                <?php endforeach; ?>
-                            <?php endif; ?>
-                            
-                            <div class="input-group input-group-outline mb-3">
-                                <label class="form-label">First Name</label>
-                                <input type="text" name="prenom" class="form-control" required>
-                            </div>
-                            <div class="input-group input-group-outline mb-3">
-                                <label class="form-label">Last Name</label>
-                                <input type="text" name="nom" class="form-control" required>
-                            </div>
-                            <div class="input-group input-group-outline mb-3">
-                                <label class="form-label">Phone</label>
-                                <input type="tel" name="telephone" class="form-control" required>
-                            </div>
-                            <div class="input-group input-group-outline mb-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="input-group input-group-outline mb-3">
-                                <label class="form-label">Password</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" name="register" class="btn btn-lg bg-gradient-dark btn-lg w-100 mt-4 mb-0">Sign Up</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                        <p class="mb-2 text-sm mx-auto">
-                            Already have an account?
-                            <a href="signin.php" class="text-primary text-gradient font-weight-bold">Sign in</a>
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+      <div class="col-12">
+      </div>
     </div>
-    <script src="../../assets/js/core/popper.min.js"></script>
+  </div>
+  <main class="main-content mt-0">
+    <section>
+      <div class="page-header min-vh-100">
+        <div class="container">
+          <div class="row">
+            <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 start-0 text-center justify-content-center flex-column">
+              <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center" style="background-image: url('../../assets/img/illustrations/illustration-signup.jpg'); background-size: cover;">
+              </div>
+            </div>
+            <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
+              <div class="card card-plain">
+                <div class="card-header">
+                  <h4 class="font-weight-bolder">Sign Up</h4>
+                  <p class="mb-0">Enter your information to register</p>
+                </div>
+                <div class="card-body">
+                  <form role="form" method="POST">
+                    <?php if (isset($errors)): ?>
+                      <?php foreach ($errors as $error): ?>
+                        <div class="alert alert-danger text-white"><?= htmlspecialchars($error) ?></div>
+                      <?php endforeach; ?>
+                    <?php endif; ?>
+                            
+                    <div class="input-group input-group-outline mb-3">
+                    <label class="form-label">First Name</label>
+                      <input type="text" name="prenom" class="form-control" placeholder=" ">
+                    </div>
+                    <div class="input-group input-group-outline mb-3">
+                      <label class="form-label">Last Name</label>
+                      <input type="text" name="nom" class="form-control" placeholder=" ">
+                    </div>
+                    <div class="input-group input-group-outline mb-3">
+                    <label class="form-label">Phone</label>
+                      <input type="tel" name="telephone" class="form-control" placeholder=" ">
+                      
+                    </div>
+                    <div class="input-group input-group-outline mb-3">
+                    <label class="form-label">Email</label>
+                      <input type="email" name="email" class="form-control" placeholder=" ">
+                    </div>
+                    <div class="input-group input-group-outline mb-3">
+                    <label class="form-label">Password</label>
+                      <input type="password" name="password" class="form-control" placeholder=" ">
+                    </div>
+                    <div class="text-center">
+                      <button type="submit" name="register" class="btn btn-lg bg-gradient-dark btn-lg w-100 mt-4 mb-0">Sign Up</button>
+                    </div>
+                  </form>
+                </div>
+                <div class="card-footer text-center pt-0 px-lg-2 px-1">
+                  <p class="mb-2 text-sm mx-auto">
+                    Already have an account?
+                    <a href="signin.php" class="text-primary text-gradient font-weight-bold">Sign in</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <!--   Core JS Files   -->
+  <script src="../../assets/js/core/popper.min.js"></script>
   <script src="../../assets/js/core/bootstrap.min.js"></script>
   <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
@@ -112,5 +152,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../../assets/js/material-dashboard.min.js?v=3.2.0"></script>
 </body>
-
 </html>

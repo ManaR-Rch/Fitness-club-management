@@ -35,42 +35,146 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
   <!-- CSS Files -->
   <link id="pagestyle" href="../../assets/css/material-dashboard.css?v=3.2.0" rel="stylesheet" />
+  <style>
+    .input-group.input-group-outline .form-label {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+    }
+    .input-group.input-group-outline .form-control {
+      background: transparent;
+      border: 1px solid #d2d6da;
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+    }
+    .input-group.input-group-outline .form-control:focus + .form-label,
+    .input-group.input-group-outline .form-control:not(:placeholder-shown) + .form-label {
+      transform: translateY(-100%) scale(0.85);
+      background: white;
+      padding: 0 0.5rem;
+      color: #7b809a;
+    }
+  </style>
 </head>
 <body class="bg-gray-200">
-    <div class="container my-auto">
-        <div class="row">
-            <div class="col-lg-4 col-md-8 col-12 mx-auto">
-                <div class="card z-index-0 fadeIn3 fadeInBottom">
-                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
-                            <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Sign in</h4>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <form role="form" method="POST" class="text-start">
-                            <?php if (isset($error)): ?>
-                                <div class="alert alert-danger text-white" role="alert"><?= htmlspecialchars($error) ?></div>
-                            <?php endif; ?>
-                            <div class="input-group input-group-outline my-3">
-                                <label class="form-label">Email</label>
-                                <input type="email" name="email" class="form-control" required>
-                            </div>
-                            <div class="input-group input-group-outline mb-3">
-                                <label class="form-label">Password</label>
-                                <input type="password" name="password" class="form-control" required>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" name="login" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign in</button>
-                            </div>
-                            <p class="mt-4 text-sm text-center">
-                                Don't have an account?
-                                <a href="signup.php" class="text-primary text-gradient font-weight-bold">Sign up</a>
-                            </p>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
+  <div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+      <div class="col-12">
+        <!-- Navbar -->
+        <!-- End Navbar -->
+      </div>
     </div>
+  </div>
+  <main class="main-content mt-0">
+    <div class="page-header align-items-start min-vh-100" style="background-image: url('../../assets/img/photo-1497294815431-9365093b7331.jpg');">
+      <span class="mask bg-gradient-dark opacity-6"></span>
+      <div class="container my-auto">
+        <div class="row">
+          <div class="col-lg-4 col-md-8 col-12 mx-auto">
+            <div class="card z-index-0 fadeIn3 fadeInBottom">
+              <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="bg-gradient-dark shadow-dark border-radius-lg py-3 pe-1">
+                  <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">Sign in</h4>
+                  <div class="row mt-3">
+                    <div class="col-2 text-center ms-auto">
+                      <a class="btn btn-link px-3" href="javascript:;">
+                        <i class="fa fa-facebook text-white text-lg"></i>
+                      </a>
+                    </div>
+                    <div class="col-2 text-center px-1">
+                      <a class="btn btn-link px-3" href="javascript:;">
+                        <i class="fa fa-github text-white text-lg"></i>
+                      </a>
+                    </div>
+                    <div class="col-2 text-center me-auto">
+                      <a class="btn btn-link px-3" href="javascript:;">
+                        <i class="fa fa-google text-white text-lg"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <form role="form" method="POST" class="text-start">
+                  <?php if (isset($error)): ?>
+                    <div class="alert alert-danger text-white" role="alert"><?= htmlspecialchars($error) ?></div>
+                  <?php endif; ?>
+                  <div class="input-group input-group-outline my-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-control">
+                  </div>
+                  <div class="input-group input-group-outline mb-3">
+                  <label class="form-label">Password</label>
+                    <input type="password" name="password" class="form-control">
+                  </div>
+                  <div class="form-check form-switch d-flex align-items-center mb-3">
+                    <input class="form-check-input" type="checkbox" id="rememberMe" checked>
+                    <label class="form-check-label mb-0 ms-3" for="rememberMe">Remember me</label>
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" name="login" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign in</button>
+                  </div>
+                  <p class="mt-4 text-sm text-center">
+                    Don't have an account?
+                    <a href="signup.php" class="text-primary text-gradient font-weight-bold">Sign up</a>
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <footer class="footer position-absolute bottom-2 py-2 w-100">
+        <div class="container">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-12 col-md-6 my-auto">
+              <div class="copyright text-center text-sm text-white text-lg-start">
+                © <script>document.write(new Date().getFullYear())</script>,
+                made with <i class="fa fa-heart" aria-hidden="true"></i> by
+                <a href="https://www.creative-tim.com" class="font-weight-bold text-white" target="_blank">Creative Tim</a>
+                for a better web.
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com" class="nav-link text-white" target="_blank">Creative Tim</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-white" target="_blank">About Us</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/blog" class="nav-link text-white" target="_blank">Blog</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-white" target="_blank">License</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </main>
+  <!--   Core JS Files   -->
+  <script src="../../assets/js/core/popper.min.js"></script>
+  <script src="../../assets/js/core/bootstrap.min.js"></script>
+  <script src="../../assets/js/plugins/perfect-scrollbar.min.js"></script>
+  <script src="../../assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script>
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
+  </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="../../assets/js/material-dashboard.min.js?v=3.2.0"></script>
 </body>
 </html>
