@@ -14,36 +14,35 @@ class Member extends User {
                 return ["success" => false, "message" => "Erreurs de validation", "errors" => $validationErrors];
             }
 
-            $db = $this->database->getConnection();            
-      
+            $pdo = $this->database->getConnection();            $
             $checkEmail = $pdo->prepare("SELECT email FROM User WHERE email = ?");
-            $checkEmail->execute([$this->email]);
-            if ($checkEmail->fetch()) {
-                return ["success" => false, "message" => "Cet email existe déjà"];
-            }
+            // $checkEmail->execute([$this->email]);
+            // if ($checkEmail->fetch()) {
+            //     return ["success" => false, "message" => "Cet email existe déjà"];
+            // }
 
-            $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+            // $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
             
-            $query = "INSERT INTO User (nom, prenom, email, phone, password, role) 
-                     VALUES (?, ?, ?, ?, ?, ?)";
+            // $query = "INSERT INTO User (nom, prenom, email, phone, password, role) 
+            //          VALUES (?, ?, ?, ?, ?, ?)";
             
-            $stmt = $pdo->prepare($query);
-            $success = $stmt->execute([
-                $this->nom,
-                $this->prenom,
-                $this->email,
-                $this->phone,
-                $hashedPassword,
-                'membre'
-            ]);
+            // $stmt = $pdo->prepare($query);
+            // $success = $stmt->execute([
+            //     $this->nom,
+            //     $this->prenom,
+            //     $this->email,
+            //     $this->phone,
+            //     $hashedPassword,
+            //     'membre'
+            // ]);
 
-            if ($success) {
-                return [
-                    "success" => true, 
-                    "message" => "Inscription réussie!",
-                    "user_id" => $pdo->lastInsertId()
-                ];
-            }
+            // if ($success) {
+            //     return [
+            //         "success" => true, 
+            //         "message" => "Inscription réussie!",
+            //         "user_id" => $pdo->lastInsertId()
+            //     ];
+            // }
 
             return ["success" => false, "message" => "Erreur lors de l'inscription"];
 
@@ -53,7 +52,7 @@ class Member extends User {
         }
     }
 
-    protected function validateData() {
+    public function validateData() {
         $errors = parent::validateData();
         // zid ay member validation rules hna
         return $errors;

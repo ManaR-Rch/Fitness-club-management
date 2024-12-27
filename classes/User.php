@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__.'/../database.php'; 
+require_once __DIR__.'/../database/connection.php'; 
 
 class User{
     protected $id_user;
@@ -20,7 +20,7 @@ class User{
         $this->setEmail($email);
         $this->setPassword($password);
         $this->setRole($role);
-        $database = new Connection();
+        $this->database = new Connection();
     }
 
 
@@ -87,13 +87,7 @@ class User{
     }
 
     //methods 3adyin
-    public function login(){
-        
-    }
-}
-
-
-    protected function validateData() {
+    public function validateData() {
         $errors = [];
 
         if (empty($this->nom) || strlen($this->nom) < 2) {
@@ -121,7 +115,7 @@ class User{
 
     public function login($email, $password) {
         try {
-            $pdo = Database::connect();
+            $pdo = $this->database->getConnection();            
             
             if (empty($email) || empty($password)) {
                 return ["success" => false, "message" => "Veuillez remplir tous les champs"];
@@ -155,3 +149,4 @@ class User{
         session_destroy();
         return ["success" => true, "message" => "Déconnexion réussie"];
     }
+}
